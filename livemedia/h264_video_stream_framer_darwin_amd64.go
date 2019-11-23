@@ -4,7 +4,7 @@ import (
 	"errors"
 	sys "syscall"
 
-	"github.com/otbzi/gitea/log"
+	"github.com/djwackey/gitea/log"
 )
 
 const (

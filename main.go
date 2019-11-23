@@ -5,7 +5,7 @@ import (
 
 	//"github.com/otbzi/dorsvr/auth"
 	"github.com/otbzi/dorsvr/rtspserver"
-	"github.com/otbzi/gitea/log"
+	"github.com/djwackey/gitea/log"
 )
 
 func main() {

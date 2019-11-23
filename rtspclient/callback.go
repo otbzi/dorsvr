@@ -2,7 +2,7 @@ package rtspclient
 
 import (
 	"github.com/otbzi/dorsvr/livemedia"
-	"github.com/otbzi/gitea/log"
+	"github.com/djwackey/gitea/log"
 )
 
 func continueAfterDESCRIBE(c *RTSPClient, resultCode int, resultStr string) {
