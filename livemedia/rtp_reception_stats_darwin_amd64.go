@@ -126,14 +126,14 @@ func (s *RTPReceptionStats) noteIncomingPacket(seqNum, rtpTimestamp, timestampFr
 	if s.lastPacketReceptionTime.Sec != 0 ||
 		s.lastPacketReceptionTime.Usec != 0 {
 		gap := (timeNow.Sec-s.lastPacketReceptionTime.Sec)*Million +
-			timeNow.Usec - s.lastPacketReceptionTime.Usec
+			int64(timeNow.Usec-s.lastPacketReceptionTime.Usec)
 		if gap > s.maxInterPacketGapUS {
 			s.maxInterPacketGapUS = gap
 		}
 		if gap < s.minInterPacketGapUS {
 			s.minInterPacketGapUS = gap
 		}
-		s.totalInterPacketGaps.Usec += gap
+		s.totalInterPacketGaps.Usec += int32(gap)
 		if s.totalInterPacketGaps.Usec >= Million {
 			s.totalInterPacketGaps.Sec++
 			s.totalInterPacketGaps.Usec -= Million
@@ -149,7 +149,7 @@ func (s *RTPReceptionStats) noteIncomingPacket(seqNum, rtpTimestamp, timestampFr
 	// fragment), or if we've been explicitly told not to use this packet.
 	if useForJitterCalculation && rtpTimestamp != s.previousPacketRTPTimestamp {
 		arrival := int64(timestampFrequency) * timeNow.Sec
-		arrival += ((2.0*int64(timestampFrequency)*timeNow.Usec + 1000000.0) / 2000000)
+		arrival += ((2.0*int64(timestampFrequency)*int64(timeNow.Usec) + 1000000.0) / 2000000)
 		// note: rounding
 		transit := arrival - int64(rtpTimestamp)
 		if s.lastTransit == -1 {
@@ -184,7 +184,7 @@ func (s *RTPReceptionStats) noteIncomingPacket(seqNum, rtpTimestamp, timestampFr
 	var seconds, uSeconds int64
 	if timeDiff >= 0.0 {
 		seconds = s.syncTime.Sec + int64(timeDiff)
-		uSeconds = s.syncTime.Usec + int64((timeDiff-float32(int64(timeDiff)))*million)
+		uSeconds = int64(s.syncTime.Usec) + int64((timeDiff-float32(int64(timeDiff)))*million)
 		if uSeconds >= int64(million) {
 			uSeconds -= int64(million)
 			seconds++
@@ -192,7 +192,7 @@ func (s *RTPReceptionStats) noteIncomingPacket(seqNum, rtpTimestamp, timestampFr
 	} else {
 		timeDiff = -timeDiff
 		seconds = s.syncTime.Sec - int64(timeDiff)
-		uSeconds = s.syncTime.Usec - int64((timeDiff-float32(int64(timeDiff)))*million)
+		uSeconds = int64(s.syncTime.Usec) - int64((timeDiff-float32(int64(timeDiff)))*million)
 		if uSeconds < 0 {
 			uSeconds += int64(million)
 			seconds--
@@ -200,7 +200,7 @@ func (s *RTPReceptionStats) noteIncomingPacket(seqNum, rtpTimestamp, timestampFr
 	}
 
 	resultPresentationTime.Sec = int64(seconds)
-	resultPresentationTime.Usec = int64(uSeconds)
+	resultPresentationTime.Usec = int32(uSeconds)
 	resultHasBeenSyncedUsingRTCP = s.hasBeenSynchronized
 
 	// Save these as the new synchronization timestamp & time:
@@ -221,7 +221,7 @@ func (s *RTPReceptionStats) noteIncomingSR(ntpTimestampMSW, ntpTimestampLSW, rtp
 	s.syncTimestamp = rtpTimestamp
 	s.syncTime.Sec = int64(ntpTimestampMSW - 0x83AA7E80)              // 1/1/1900 -> 1/1/1970
 	microseconds := float32((ntpTimestampLSW * 15625.0) / 0x04000000) // 10^6/2^32
-	s.syncTime.Usec = int64(microseconds + 0.5)
+	s.syncTime.Usec = int32(microseconds + 0.5)
 	s.hasBeenSynchronized = true
 }
 

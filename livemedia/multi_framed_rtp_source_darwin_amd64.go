@@ -331,9 +331,9 @@ func (p *BufferedPacket) use(buff []byte, size uint32) (info *PacketInfo) {
 	}
 
 	// Update "presentationTime" for the next enclosed frame (if any):
-	p.presentationTime.Usec += int64(frameDurationInMicroseconds)
+	p.presentationTime.Usec += int32(frameDurationInMicroseconds)
 	if p.presentationTime.Usec >= 1000000 {
-		p.presentationTime.Sec += p.presentationTime.Usec / 1000000
+		p.presentationTime.Sec += int64(p.presentationTime.Usec / 1000000)
 		p.presentationTime.Usec = p.presentationTime.Usec % 1000000
 	}
 
@@ -503,7 +503,7 @@ func (b *ReorderingPacketBuffer) getNextCompletedPacket() (IBufferedPacket, bool
 
 		timeReceived := b.headPacket.TimeReceived()
 		uSecondsSinceReceived := (timeNow.Sec-timeReceived.Sec)*1000000 +
-			(timeNow.Usec - timeReceived.Usec)
+			int64(timeNow.Usec-timeReceived.Usec)
 		timeThresholdHasBeenExceeded = uSecondsSinceReceived > b.thresholdTime
 	}
 

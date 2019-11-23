@@ -272,7 +272,7 @@ func (p *H264VideoStreamParser) parse() (uint, error) {
 		nextFraction := float32(p.UsingSource().nextPresentationTime.Usec)/1000000.0 + 1/float32(p.UsingSource().frameRate)
 		nextSecsIncrement := float32(uint(nextFraction))
 		p.UsingSource().nextPresentationTime.Sec += int64(nextSecsIncrement)
-		p.UsingSource().nextPresentationTime.Usec = int64((nextFraction - nextSecsIncrement) * 1000000)
+		p.UsingSource().nextPresentationTime.Usec = int32((nextFraction - nextSecsIncrement) * 1000000)
 	}
 	p.setParseState()
 	return p.curFrameSize(), nil
