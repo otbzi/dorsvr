@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net"
 
-	gs "github.com/djwackey/dorsvr/groupsock"
+	gs "github.com/otbzi/dorsvr/groupsock"
 )
 
 type IServerMediaSubsession interface {

@@ -5,8 +5,8 @@ import (
 	"fmt"
 	sys "syscall"
 
-	gs "github.com/djwackey/dorsvr/groupsock"
-	"github.com/djwackey/gitea/log"
+	gs "github.com/otbzi/dorsvr/groupsock"
+	"github.com/otbzi/gitea/log"
 )
 
 //////// H264VideoRTPSink ////////

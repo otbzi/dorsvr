@@ -5,8 +5,8 @@ import (
 	"net"
 	sys "syscall"
 
-	gs "github.com/djwackey/dorsvr/groupsock"
-	//"github.com/djwackey/dorsvr/log"
+	gs "github.com/otbzi/dorsvr/groupsock"
+	//"github.com/otbzi/dorsvr/log"
 )
 
 //////// RTPSink ////////

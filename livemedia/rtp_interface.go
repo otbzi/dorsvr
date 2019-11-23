@@ -3,8 +3,8 @@ package livemedia
 import (
 	"net"
 
-	gs "github.com/djwackey/dorsvr/groupsock"
-	"github.com/djwackey/gitea/log"
+	gs "github.com/otbzi/dorsvr/groupsock"
+	"github.com/otbzi/gitea/log"
 )
 
 type RTPInterface struct {
